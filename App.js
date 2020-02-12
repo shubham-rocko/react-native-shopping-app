@@ -7,9 +7,11 @@ import { AppLoading } from "expo";
 import * as Fonts from 'expo-font';
 
 import ProductReducer from './store/reducers/Products';
+import CartReducer from "./store/reducers/cart";
 
 const rootReducer = combineReducers({
-  products: ProductReducer
+  products: ProductReducer,
+  cartItems: CartReducer
 });
 
 const store = createStore(rootReducer);
