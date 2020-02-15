@@ -5,7 +5,7 @@ import Colors from '../../constants/Colors';
 
 const ProductItem = props => {
     return (
-        <TouchableOpacity activeOpacity={0.6} onPress={props.onViewDetail}>
+        <TouchableOpacity activeOpacity={0.6} onPress={props.onSelect}>
             <View style={styles.product}>
                 <View style={styles.imageContainer}>
                     <Image
@@ -17,8 +17,7 @@ const ProductItem = props => {
                     <Text style={styles.price}>${props.price.toFixed(2)}</Text>
                 </View>
                 <View style={styles.actions}>
-                    <Button color={Colors.primary} title="View Details" onPress={props.onViewDetail}/>
-                    <Button color={Colors.primary} title="To Cart" onPress={props.addToCart}/>
+                    {props.children}
                 </View>
             </View>
         </TouchableOpacity>
