@@ -1,16 +1,23 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, Platform } from 'react-native';
+import { FlatList, StyleSheet, Button, Platform } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import ProductItem from '../../components/shop/ProductItem';
 import * as CartAction from '../../store/actions/cart';
 import CustomHeaderButton from '../../components/UI/HeaderButton';
+import Colors from '../../constants/Colors';
 
 const ProductOverviewScreen = props => {
 
     const productData = useSelector(state => state.products.availableProducts);
     const dispatch = useDispatch();
+
+    const viewDetailHandler = (id, title) => {
+        props.navigation.navigate('productDetail', 
+        {productId: itemData.item.id,
+        productTitle: itemData.item.title})
+    }
 
     return (<FlatList 
         data={productData} renderItem={(itemData) => (
@@ -18,14 +25,22 @@ const ProductOverviewScreen = props => {
             title={itemData.item.title} 
             price={itemData.item.price} 
             image={itemData.item.imageUrl} 
-            onViewDetail={() => {
-                props.navigation.navigate('productDetail', 
-                {productId: itemData.item.id,
-                productTitle: itemData.item.title})
-            }}
-            addToCart={() => {
-                dispatch(CartAction.addToCart(itemData.item))
-            }}/>
+            onSelect={() => {
+                viewDetailHandler(itemData.item.id, itemData.item.title)
+            }}>
+                <Button 
+                color={Colors.primary} 
+                title="View Details" 
+                onPress={() => {
+                    viewDetailHandler(itemData.item.id, itemData.item.title)
+                }}/>
+                <Button 
+                color={Colors.primary} 
+                title="To Cart" 
+                onPress={() => {
+                    dispatch(CartAction.addToCart(itemData.item))
+                }}/>
+            </ProductItem>
         )}/>)
 }
 
