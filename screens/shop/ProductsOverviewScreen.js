@@ -15,8 +15,8 @@ const ProductOverviewScreen = props => {
 
     const viewDetailHandler = (id, title) => {
         props.navigation.navigate('productDetail', 
-        {productId: itemData.item.id,
-        productTitle: itemData.item.title})
+        {productId: id,
+        productTitle: title})
     }
 
     return (<FlatList 
