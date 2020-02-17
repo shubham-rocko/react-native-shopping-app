@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TextInput } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -23,6 +23,7 @@ const EditProductScreen = props => {
         } else {
             dispatch(ProductsAction.createProduct(title, description, imageURL, +price));
         }
+        props.navigation.goBack();
     }, [dispatch, prodId, title, description, imageURL, price]);
 
     useEffect(() => {
@@ -36,36 +37,33 @@ const EditProductScreen = props => {
                 <TextInput 
                 style={styles.input}
                 value={title}
-                onChangeText={(text) => {
-                    setTitle(text)
-                }}/>
+                keyboardType='default'
+                autoCapitalize="sentences"
+                autoCorrect
+                returnKeyType="next"
+                onChangeText={(text) => setTitle(text)}/>
             </View>
             <View style={styles.formControl}>
                 <Text style={styles.label}>Image URL</Text>
                 <TextInput 
                 style={styles.input}
                 value={imageURL}
-                onChangeText={(text) => {
-                    setImageURL(text)
-                }}/>
+                onChangeText={(text) => setImageURL(text)}/>
             </View>
             {editedProduct ? null : <View style={styles.formControl}>
                 <Text style={styles.label}>Price</Text>
                 <TextInput 
                 style={styles.input}
                 value={price}
-                onChangeText={(text) => {
-                    setPrice(text)
-                }}/>
+                keyboardType="decimal-pad"
+                onChangeText={(text) => setPrice(text)}/>
             </View>}
             <View style={styles.formControl}>
                 <Text style={styles.label}>Description</Text>
                 <TextInput 
                 style={styles.input}
                 value={description}
-                onChangeText={(text) => {
-                    setDescription(text)
-                }}/>
+                onChangeText={(text) => setDescription(text)}/>
             </View>
         </ScrollView>
     )
