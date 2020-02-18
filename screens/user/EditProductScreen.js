@@ -13,21 +13,37 @@ const EditProductScreen = props => {
     const dispatch = useDispatch();
 
     const [title, setTitle] = useState(editedProduct ? editedProduct.title : '');
+    const [titleIsValid, setTitleIsValid] = useState(false);
     const [imageURL, setImageURL] = useState(editedProduct ? editedProduct.imageUrl : '');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState(editedProduct ? editedProduct.description : '');
 
     const submitHandler = useCallback(() => {
+        if(!titleIsValid) {
+            Alert.alert('Wrong Input!', 'Please check the form Inputs!', [{
+                text: 'Okay'
+            }])
+            return ;
+        }
         if(editedProduct){
             dispatch(ProductsAction.updateProduct(prodId, title, description, imageURL));
         } else {
             dispatch(ProductsAction.createProduct(title, description, imageURL, +price));
         }
+        props.navigation.goBack();
     }, [dispatch, prodId, title, description, imageURL, price]);
 
     useEffect(() => {
         props.navigation.setParams({ submit: submitHandler })
     }, [submitHandler]);
+
+    titleChangeHandler = (text) => {
+        if(text.trim().length > 0){
+            setTitle(text);
+        } else {
+            setTitleIsValid(true)
+        }
+    }
 
     return (
         <ScrollView style={styles.form}>
@@ -36,36 +52,34 @@ const EditProductScreen = props => {
                 <TextInput 
                 style={styles.input}
                 value={title}
-                onChangeText={(text) => {
-                    setTitle(text)
-                }}/>
+                keyboardType='default'
+                autoCapitalize="sentences"
+                autoCorrect
+                returnKeyType="next"
+                onChangeText={titleChangeHandler}/>
             </View>
+            {!titleIsValid && <Text>Please enter a valid title</Text>}
             <View style={styles.formControl}>
                 <Text style={styles.label}>Image URL</Text>
                 <TextInput 
                 style={styles.input}
                 value={imageURL}
-                onChangeText={(text) => {
-                    setImageURL(text)
-                }}/>
+                onChangeText={(text) => setImageURL(text)}/>
             </View>
             {editedProduct ? null : <View style={styles.formControl}>
                 <Text style={styles.label}>Price</Text>
                 <TextInput 
                 style={styles.input}
                 value={price}
-                onChangeText={(text) => {
-                    setPrice(text)
-                }}/>
+                keyboardType="decimal-pad"
+                onChangeText={(text) => setPrice(text)}/>
             </View>}
             <View style={styles.formControl}>
                 <Text style={styles.label}>Description</Text>
                 <TextInput 
                 style={styles.input}
                 value={description}
-                onChangeText={(text) => {
-                    setDescription(text)
-                }}/>
+                onChangeText={(text) => setDescription(text)}/>
             </View>
         </ScrollView>
     )
