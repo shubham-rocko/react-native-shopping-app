@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TextInput, Alert } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -13,11 +13,18 @@ const EditProductScreen = props => {
     const dispatch = useDispatch();
 
     const [title, setTitle] = useState(editedProduct ? editedProduct.title : '');
+    const [titleIsValid, setTitleIsValid] = useState(false);
     const [imageURL, setImageURL] = useState(editedProduct ? editedProduct.imageUrl : '');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState(editedProduct ? editedProduct.description : '');
 
     const submitHandler = useCallback(() => {
+        if(!titleIsValid) {
+            Alert.alert('Wrong Input!', 'Please check the form Inputs!', [{
+                text: 'Okay'
+            }])
+            return ;
+        }
         if(editedProduct){
             dispatch(ProductsAction.updateProduct(prodId, title, description, imageURL));
         } else {
@@ -30,6 +37,14 @@ const EditProductScreen = props => {
         props.navigation.setParams({ submit: submitHandler })
     }, [submitHandler]);
 
+    titleChangeHandler = (text) => {
+        if(text.trim().length > 0){
+            setTitle(text);
+        } else {
+            setTitleIsValid(true)
+        }
+    }
+
     return (
         <ScrollView style={styles.form}>
             <View style={styles.formControl}>
@@ -41,8 +56,9 @@ const EditProductScreen = props => {
                 autoCapitalize="sentences"
                 autoCorrect
                 returnKeyType="next"
-                onChangeText={(text) => setTitle(text)}/>
+                onChangeText={titleChangeHandler}/>
             </View>
+            {!titleIsValid && <Text>Please enter a valid title</Text>}
             <View style={styles.formControl}>
                 <Text style={styles.label}>Image URL</Text>
                 <TextInput 
