@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import CustomHeaderButton from '../../components/UI/HeaderButton';
 import * as ProductsAction from '../../store/actions/Products';
+import Input from '../../components/UI/input';
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -95,28 +96,35 @@ const EditProductScreen = props => {
 
     return (
         <ScrollView style={styles.form}>
-            <View style={styles.formControl}>
-                <Text style={styles.label}>Image URL</Text>
-                <TextInput 
-                style={styles.input}
-                value={formState.inputValues.imageURL}
-                onChangeText={textChangeHandler.bind(this, 'imageURL')}/>
-            </View>
-            {editedProduct ? null : <View style={styles.formControl}>
-                <Text style={styles.label}>Price</Text>
-                <TextInput 
-                style={styles.input}
-                value={formState.inputValues.price}
+            <Input 
+                label="Title"
+                errorTitle="Please enter a valid title!!"
+                keyboardType="default"
+                autoCapitalize="sentences"
+                autoCorrect
+                returnKeyType="next"
+            />
+             <Input 
+                label="Image Url"
+                errorTitle="Please enter a valid image url!!"
+                keyboardType="default"
+                returnKeyType="next"
+            />
+            {editedProduct ? null : <Input 
+                label="Price"
+                errorTitle="Please enter a valid Price!!"
                 keyboardType="decimal-pad"
-                onChangeText={textChangeHandler.bind(this, 'price')}/>
-            </View>}
-            <View style={styles.formControl}>
-                <Text style={styles.label}>Description</Text>
-                <TextInput 
-                style={styles.input}
-                value={formState.inputValues.description}
-                onChangeText={textChangeHandler.bind(this, 'description')}/>
-            </View>
+                returnKeyType="next"
+            />}
+             <Input 
+                label="Description"
+                errorTitle="Please enter a valid description!!"
+                keyboardType="default"
+                autoCapitalize="sentences"
+                autoCorrect
+                multiline
+                numerOfLines={3}
+            />
         </ScrollView>
     )
 }
